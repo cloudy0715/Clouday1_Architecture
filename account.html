@@ -1,0 +1,513 @@
+<!DOCTYPE >
+
+<html>
+  <head>
+    <title>ClouDay1 Architecture</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1"
+    />
+
+    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/jsfile/0.1.17/workers/readFile.js"
+    ></script>
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <!-- for testing with local version of cytoscape.js -->
+    <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
+
+    <!-- dagre -->
+    <script src="https://unpkg.com/dagre@0.7.4/dist/dagre.js"></script>
+    <script src="cytoscape-dagre.js"></script>
+    <!-- klay -->
+    <script src="https://unpkg.com/klayjs@0.4.1/klay.js"></script>
+    <script src="https://unpkg.com/cytoscape-klay@3.1.2/cytoscape-klay.js"></script>
+  </head>
+
+  <body>
+    <!-- nav -->
+    <div class="page-wrapper chiller-theme toggled">
+      <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars fa-2x"></i>
+      </a>
+      <!-- sidebar -->
+      <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+          <div class="sidebar-brand">
+            <a href="#">ClouDay1</a>
+            <div id="close-sidebar">
+              <i class="bi bi-chevron-double-left"></i>
+            </div>
+          </div>
+          <div class="sidebar-menu">
+            <ul>
+              <li class="sidebar-dropdown">
+                <a href="#">
+                  <i class="fa fa-tachometer-alt"></i>
+                  <span>Dashboard</span>
+                  <!-- <span class="badge badge-pill badge-warning">New</span> -->
+                </a>
+                <div class="sidebar-submenu">
+                  <ul>
+                    <li>
+                      <a href="#"
+                        >Support Services
+                        <!-- <span class="badge badge-pill badge-success">Pro</span> -->
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">FAQ</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="sidebar-dropdown">
+                <a href="#">
+                  <i class="fa fa-coins"></i>
+                  <span>Billing</span>
+                  <!-- <span class="badge badge-pill badge-danger">3</span> -->
+                </a>
+                <div class="sidebar-submenu">
+                  <ul>
+                    <li>
+                      <a href="#">Products </a>
+                    </li>
+                    <li>
+                      <a href="#">Orders</a>
+                    </li>
+                    <li>
+                      <a href="#">Credit cart</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="sidebar-dropdown">
+                <a href="#">
+                  <i class="fa fa-globe"></i>
+                  <span>Automation</span>
+                </a>
+                <div class="sidebar-submenu">
+                  <ul>
+                    <li>
+                      <a href="#">General</a>
+                    </li>
+                    <li>
+                      <a href="#">Panels</a>
+                    </li>
+                    <li>
+                      <a href="#">Tables</a>
+                    </li>
+                    <li>
+                      <a href="#">Icons</a>
+                    </li>
+                    <li>
+                      <a href="#">Forms</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="sidebar-dropdown active">
+                <a href="#">
+                  <i class="fa fa-object-group"></i>
+                  <span>Architecture</span>
+                </a>
+                <div class="sidebar-submenu active">
+                  <ul>
+                    <li class="active">
+                      <a href="#">
+                        <img
+                          src="https://img.icons8.com/color/28/000000/amazon-web-services.png"
+                        />
+                        AWS
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <img
+                          src="https://img.icons8.com/color/28/000000/azure-1.png"
+                        />
+                        Azure
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <img
+                          src="https://img.icons8.com/color/28/000000/google-cloud.png"
+                        />
+                        GCP
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <!-- sidebar-menu  -->
+        </div>
+        <!-- sidebar-content  -->
+        <div class="sidebar-footer">
+          <a href="#">
+            <i class="fa fa-bell"></i>
+            <span class="badge badge-pill badge-warning notification">3</span>
+          </a>
+          <a href="#">
+            <i class="fa fa-envelope"></i>
+            <span class="badge badge-pill badge-success notification">7</span>
+          </a>
+          <a href="#">
+            <i class="fa fa-cog"></i>
+            <span class="badge-sonar"></span>
+          </a>
+          <!-- <a href="#">
+            <i class="fa fa-power-off"></i>
+          </a> -->
+        </div>
+      </nav>
+      <!-- sidebar-sub -->
+      <nav id="sidebar-sub" class="sidebar-sub-wrapper">
+        <div class="sidebar-content">
+          <div class="sidebar-brand">
+            <div id="close-sidebar">
+              <i class="fas fa-times"></i>
+            </div>
+          </div>
+          <div class="sidebar-detail">
+            <div class="d-flex test">
+              <img
+                src="./img/Arch_AWS-Lambda_32.png"
+                class="sidebarImg"
+                id="sidebarImg"
+              />
+              <h3 id="dataType" class="dataType"></h3>
+            </div>
+            <ul id="sidebar-menu" class="sidebar-menu"></ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- page-content" -->
+      <main class="page-content">
+        <h2 class="text-gray">
+          Architecture<i class="bi bi-chevron-compact-right"></i
+          ><span class="text-primary fw-bold">AWS</span>
+        </h2>
+        <hr />
+        <div class="py-1">
+          <div class="d-flex justify-content-between py-3 mb-1">
+            <h3 class="fw-bold ">Imported Accounts</h3>
+            <a
+              class="btn btn-outline-secondary"
+              data-bs-toggle="modal"
+              href="#exampleModal"
+              role="button"
+              ><i class="bi bi-plus-square-dotted"></i> New Account</a
+            >
+            <!-- modal -->
+            <div
+              class="modal fade"
+              id="exampleModal"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title fw-bold" id="exampleModalLabel">
+                      New AWS Account
+                    </h3>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <h4 class="fw-bold">
+                      Follow these steps to import your Account in<br />ClouDay1
+                      Architecture
+                    </h4>
+                    <div class="d-flex auth-content">
+                      <div class="content-block">
+                        <span class="fw-bold">1. Create a new IAM Role</span>
+                        <span class="description"
+                          >ClouDay1 Architecture can connect to AWS and import
+                          your account. You need a new or existing IAM user with
+                          at least the following permissions.</span
+                        >
+                        <div class="card">
+                          <div class="card-header text-gray fw-bold">
+                            IAM Permissions
+                          </div>
+                          <div class="card-body">
+                            <textarea
+                              class="policy-area-text"
+                              id="policy-area-text"
+                            >
+                            </textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="content-block">
+                        <span class="fw-bold"
+                          >2. Authenticate ClouDay1 Architecture</span
+                        >
+                        <span class="description"
+                          >Enter the access key credentials for your IAM
+                          user.</span
+                        >
+                        <div class="card">
+                          <div class="card-body bg-light">
+                            <div class="mb-2 row">
+                              <label
+                                for="AccessKey"
+                                class="col-sm-4 col-form-label"
+                                >AWS Access Key</label
+                              >
+                              <div class="col-sm-8">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id="AccessKey"
+                                />
+                              </div>
+                            </div>
+                            <div class="mb-2 row">
+                              <label
+                                for="Secretkey"
+                                class="col-sm-4 col-form-label"
+                                >AWS Secret key</label
+                              >
+                              <div class="col-sm-8">
+                                <input
+                                  type="password"
+                                  class="form-control"
+                                  id="Secretkey"
+                                />
+                              </div>
+                            </div>
+                            <div class="row">
+                              <label
+                                for="SessionToken"
+                                class="col-sm-4 col-form-label"
+                                >Session Token (Optional)</label
+                              >
+                              <div class="col-sm-8">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id="SessionToken"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card mb-4">
+                          <div class="card-body bg-light">
+                            <div class="row">
+                              <label
+                                for="Region"
+                                class="col-sm-4 col-form-label"
+                                >Region</label
+                              >
+                              <div class="col-sm-8">
+                                <select
+                                  class="form-select"
+                                  aria-label="Default select example"
+                                  id="Region"
+                                >
+                                  <option selected>-- Select --</option>
+                                  <option value="1">us-east-1</option>
+                                  <option value="2">us-east-2</option>
+                                  <option value="3">us-west-1</option>
+                                  <option value="3">us-west-2</option>
+                                </select>
+                                <!--  -->
+                                <!-- <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle dropdown-text" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Dropdown button
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                      <li><a href="#" class="dropdown-item"><label><input type="checkbox" class="selectall" /><span class="select-text"> Select</span> All</label></a></li>
+                                      <li class="divider" class="dropdown-item"></li>
+                                      <li><a class="option-link dropdown-item" href="#"><label><input name='options[]' type="checkbox" class="option justone" value='Option 1 '/> Option 1</label></a></li>
+                                      <li><a href="#" class="dropdown-item"><label><input name='options[]' type="checkbox" class="option justone" value='Option 2 '/> Option 2</label></a></li>
+                                      <li><a href="#" class="dropdown-item"><label><input name='options[]' type="checkbox" class="option justone" value='Option 3 '/> Option 3</label></a></li>
+
+                                    </ul>
+                                  </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span class="dropdown-text"> Select Options</span>
+                                    <span class="caret"></span></button>
+                                    <ul class="dropdown-region-menu">
+                                      <li><a href="#"><label><input type="checkbox" class="selectall" /><span class="select-text"> Select</span> All</label></a></li>
+                                      <li class="divider"></li>
+                                      <li><a class="option-link" href="#"><label><input name='options[]' type="checkbox" class="option justone" value='Option 1 '/> Option 1</label></a></li>
+                                      <li><a href="#"><label><input name='options[]' type="checkbox" class="option justone" value='Option 2 '/> Option 2</label></a></li>
+                                      <li><a href="#"><label><input name='options[]' type="checkbox" class="option justone" value='Option 3 '/> Option 3</label></a></li>
+                                    </ul>
+                                  </div> -->
+                                <!--  -->
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="import-account-name">
+                          <span class="fw-bold">3. Import Summary</span>
+                          <span class="description">Account to import</span>
+                          <div class="row mt-2">
+                            <label
+                              for="AccountName"
+                              class="col-sm-4 col-form-label"
+                              >Account Name</label
+                            >
+                            <div class="col-sm-6">
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="AccountName"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      id="import-finish"
+                      data-bs-target="#exampleModalToggle2"
+                      data-bs-toggle="modal"
+                    >
+                      Finish
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- modal end -->
+            <!-- modal 2 -->
+            <div
+              class="modal fade"
+              id="exampleModalToggle2"
+              tabindex="-1"
+              aria-labelledby="exampleModalToggle2"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title fw-bold" id="exampleModalLabel">
+                      New AWS Account
+                    </h3>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                      id="close-modal"
+                    ></button>
+                  </div>
+                  <div class="modal-body container">
+                    <div class="loading">
+                      <div class="span-container">
+                        <span class="one"></span>
+                        <span class="two"></span>
+                        <span class="three"></span>
+                        <span class="four"></span>
+                      </div>
+                      <h5 class="fw-bold mt-3 text-center">
+                        Importing your data...
+                      </h5>
+                      <p class="text-center text-gray">
+                        <i
+                          class="bi bi-exclamation-triangle-fill warning-text"
+                        ></i>
+                        This process could take serveral minutes. <br />To avoid
+                        losing progress, don't close this browser tab.
+                      </p>
+                    </div>
+                    <!-- finish page -->
+                    <div class="finsh-madal">
+                      <h5 class="fw-bold mt-3">Your data has completed.</h5>
+                      <p class="text-center">
+                        Please click <a href="demo.html">here</a> to see your
+                        Architecture.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- modal 2 end -->
+          </div>
+          <div class="account-info">
+            <table class="table table-hover account-table">
+              <thead>
+                <tr>
+                  <th scope="col">Account name</th>
+                  <th scope="col">Account ID</th>
+                  <th scope="col">Last updated</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- <tr>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr> -->
+              </tbody>
+            </table>
+            <div class="py-5">
+              <img src="img/default/frmae_img.png" alt="" />
+              <p class="text-center mt-3 text-gray">
+                Import your AWS Accounts into the ClouDay1 Architecture.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <!-- JavaScript Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
+    <script src="./src/data.js"></script>
+    <script src="./src/navbar.js" type="module"></script>
+  </body>
+</html>
